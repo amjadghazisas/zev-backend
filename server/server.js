@@ -3,24 +3,13 @@ var bodyParser = require('body-parser');
 
 var {mongoose} = require('./db/mongoose');
 var {User} = require('./models/User');
+var {findOneQuery} = require('./db/queries/mongoose-queries');
 
 var app = express();
 
 app.use(bodyParser.json());
 
 app.post('/users',(req,res) => {
-
-    //console.log(req.body);
-
-    console.log("req.body.mobileNumber.... "+req.body.mobileNumber);
-
-    /*var user = new User({
-
-        mobileNumber:req.body.mobileNumber,
-        firstName:req.body.firstName,
-        middleName:req.body.middleName,
-        lastName:req.body.lastName
-    });*/
 
     var user = new User(req.body);
 
@@ -34,6 +23,25 @@ app.post('/users',(req,res) => {
         console.log("Failed To Save User",err);
         res.status(400).send(err);
     });
+});
+
+app.get('/users',(req,res) => {
+
+    User.find().then((docs)=>{
+
+        res.send({users:docs});
+
+    },(err)=>{
+
+        res.status(400).send();
+    });
+    
+});
+
+app.get('/xxx',(req,res) => {
+
+    findOneQuery(User,{firstName:"Ajay"},res);    
+    
 });
 
 app.listen(9000,() => {
