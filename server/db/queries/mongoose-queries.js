@@ -1,14 +1,15 @@
 const {mongoose} = require('mongoose');
+const {ObjectID} = require ('mongodb');
 
-const findQuery = (model) => {
+const findQuery = (model,res) => {
 
     model.find(queryObj).then((docs)=>{
 
-        return docs;
+        res.status(200).send(docs);
 
     },(err)=>{
 
-        return err;
+        res.status(400).send();
     });
 };
 
@@ -26,15 +27,26 @@ const findOneQuery = (model,queryObj,res) => {
     
 };
 
-const findByIdQuery = (model,id) => {
+const findByIdQuery = (model,id,res) => {
 
-    model.findOne(id).then((docs)=>{
+    if(!ObjectID.isValid(id)){
 
-        return docs;
+        console.log("Id is not valid");
+        return res.status(400).send();
+    }
+    
+    model.findById(id).then((docs)=>{
 
-    },(err)=>{
+        //id did not match any record, no error will be thrown and hence handling
+        if(!docs){
+             console.log("Id not found");
+             return res.status(404).send();
+        }
 
-        return err;
+        res.status(200).send({docs});
+
+    }).catch((e) => {
+        console.log(e);
     });
 
     

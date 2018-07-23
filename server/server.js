@@ -1,9 +1,11 @@
 var express = require('express');
 var bodyParser = require('body-parser');
+const {ObjectID} = require ('mongodb');
 
 var {mongoose} = require('./db/mongoose');
 var {User} = require('./models/User');
 var {findOneQuery} = require('./db/queries/mongoose-queries');
+var {findByIdQuery} = require('./db/queries/mongoose-queries');
 
 var app = express();
 
@@ -38,9 +40,10 @@ app.get('/users',(req,res) => {
     
 });
 
-app.get('/xxx',(req,res) => {
+app.get('/users/:userId',(req,res) => {
 
-    findOneQuery(User,{firstName:"Ajay"},res);    
+    var id = req.params.userId;
+    findByIdQuery(User,id,res);
     
 });
 
