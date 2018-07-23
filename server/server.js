@@ -1,6 +1,5 @@
 var express = require('express');
 var bodyParser = require('body-parser');
-const {ObjectID} = require ('mongodb');
 
 var {mongoose} = require('./db/mongoose');
 var {User} = require('./models/User');
@@ -8,6 +7,8 @@ var {findOneQuery} = require('./db/queries/mongoose-queries');
 var {findByIdQuery} = require('./db/queries/mongoose-queries');
 
 var app = express();
+
+const port = process.env.PORT || 9000;
 
 app.use(bodyParser.json());
 
@@ -47,7 +48,7 @@ app.get('/users/:userId',(req,res) => {
     
 });
 
-app.listen(9000,() => {
+app.listen(port,() => {
 
-    console.log("Started on Port 9000");
+    console.log(`Started on Port ${port}`);
 });
