@@ -2,7 +2,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 
 var {mongoose} = require('./db/mongoose');
-var {User} = require('./models/User');
+var {User} = require('./models/user');
 var {findOneQuery} = require('./db/queries/mongoose-queries');
 var {findByIdQuery} = require('./db/queries/mongoose-queries');
 
