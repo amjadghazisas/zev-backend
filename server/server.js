@@ -7,6 +7,7 @@ const {User} = require('./models/user');//
 const {findOneQuery} = require('./db/queries/mongoose-queries');
 const {findByIdQuery} = require('./db/queries/mongoose-queries');
 const {removeAll, removeById, removeOne, update} = require('./db/queries/mongoose-queries');
+const {addUser} = require('./services/addUser');
 
 var app = express();
 
@@ -16,7 +17,7 @@ app.use(bodyParser.json());
 
 app.post('/users',(req,res) => {
 
-    var user = new User(req.body);
+    /*var user = new User(req.body);
 
     user.save().then((doc) => {
 
@@ -27,7 +28,9 @@ app.post('/users',(req,res) => {
 
         console.log("Failed To Save User",err);
         res.status(400).send(err);
-    });
+    });*/
+
+    addUser(req,res);
 });
 
 app.get('/users',(req,res) => {

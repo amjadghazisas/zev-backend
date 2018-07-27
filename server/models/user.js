@@ -1,16 +1,47 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
+const validator = require('validator');
 
 var User = mongoose.model('Users',{
 
     mobileNumber:{
-        type: Number,
-        required: true
+        type: String,
+        required: true,
+        unique: true,
+        validate: {
+
+            validator: (value)=>{
+
+                validator.isMobilePhone(value,'en-IN',{strictMode:true})
+            },
+            message: '{VALUE} is not a valid mobile number'
+        }
     },
+
+    password:{
+
+        type: String,
+        required :true,
+        minlength: 6
+    },
+
+    tokens:[
+
+        {
+            access:{
+                type: String,
+                required: true
+            },
+            token:{
+                type: String,
+                required: true
+            }
+        }
+    ],
 
     firstName: {
         type: String,
         required: true,
-        minLength: 1,
+        minlength: 1,
         trim: true
     },
 
@@ -23,7 +54,7 @@ var User = mongoose.model('Users',{
     lastName: {
         type: String,
         required: true,
-        minLength: 1,
+        minlength: 1,
         trim: true
     }
 });
