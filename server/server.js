@@ -1,10 +1,12 @@
-var express = require('express');
-var bodyParser = require('body-parser');
+const express = require('express');
+const bodyParser = require('body-parser');
+const _ = require('lodash');
 
-var {mongoose} = require('./db/mongoose');
-var {User} = require('./models/user');//
-var {findOneQuery} = require('./db/queries/mongoose-queries');
-var {findByIdQuery} = require('./db/queries/mongoose-queries');
+const {mongoose} = require('./db/mongoose');
+const {User} = require('./models/user');//
+const {findOneQuery} = require('./db/queries/mongoose-queries');
+const {findByIdQuery} = require('./db/queries/mongoose-queries');
+const {removeAll, removeById, removeOne, update} = require('./db/queries/mongoose-queries');
 
 var app = express();
 
@@ -45,6 +47,36 @@ app.get('/users/:userId',(req,res) => {
 
     var id = req.params.userId;
     findByIdQuery(User,id,res);
+    
+});
+
+app.delete('/removeAll',(req,res) => {
+
+    removeAll(User,res);
+    
+});
+
+app.delete('/removeOne',(req,res) => {
+
+    removeOne(User,{firstName:"Amjad"},res);
+    
+});
+
+app.delete('/remove/:userId',(req,res) => {
+
+    var id = req.params.userId;
+
+    removeById(User,id,res);
+    
+});
+
+app.patch('/update/:userId',(req,res) => {
+
+    var id = req.params.userId;
+
+    //pick API of lodas is great to ensure that we update only specified properties.
+    var body = _.pick(req.body,['firstName','middleName', 'lastName']); 
+    update(User,id,res,body);
     
 });
 
