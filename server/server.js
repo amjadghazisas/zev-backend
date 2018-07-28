@@ -8,6 +8,9 @@ const {findOneQuery} = require('./db/queries/mongoose-queries');
 const {findByIdQuery} = require('./db/queries/mongoose-queries');
 const {removeAll, removeById, removeOne, update} = require('./db/queries/mongoose-queries');
 const {addUser} = require('./services/addUser');
+const {getMe} = require('./services/getMe');
+
+const {authenticate} = require("./middleware/authenticate");
 
 var app = express();
 
@@ -31,6 +34,11 @@ app.get('/users',(req,res) => {
         res.status(400).send();
     });
     
+});
+
+app.get('/users/me',authenticate, (req,res) => {
+
+    getMe(req,res);
 });
 
 app.get('/users/:userId',(req,res) => {
