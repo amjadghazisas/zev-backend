@@ -8,14 +8,16 @@ const addUser = (req,res) =>{
     var user = new User(body);
 
     user.save().then((doc) => {
+        
+        return user.generateAuthToken();
 
-        console.log("User Saved Successfully ",doc);
-        res.status(200).send(doc);
+    }).then((token)=>{
 
-    },(err) => {
+        res.header('x-auth',token).send(user);
 
-        console.log("Failed To Save User",err);
-        res.status(400).send(err);
+    }).catch((err)=>{
+
+        res.status(400).send();
     });
 
 }

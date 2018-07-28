@@ -17,19 +17,6 @@ app.use(bodyParser.json());
 
 app.post('/users',(req,res) => {
 
-    /*var user = new User(req.body);
-
-    user.save().then((doc) => {
-
-        console.log("User Saved Successfully ",doc);
-        res.status(200).send(doc);
-
-    },(err) => {
-
-        console.log("Failed To Save User",err);
-        res.status(400).send(err);
-    });*/
-
     addUser(req,res);
 });
 

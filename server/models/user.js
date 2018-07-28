@@ -1,7 +1,9 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
+const jwt = require('jsonwebtoken');
+const _ =require('lodash');
 
-var User = mongoose.model('Users',{
+var UserSchema = new mongoose.Schema({
 
     mobileNumber:{
         type: String,
@@ -57,7 +59,50 @@ var User = mongoose.model('Users',{
         minlength: 1,
         trim: true
     }
+
+
 });
+
+//using regular and not arrow functions since we want to bind this function to the instance
+UserSchema.methods.generateAuthToken = function(){
+
+    var user = this;
+    var access = 'auth';
+
+    var token = jwt.sign({_id:user._id.toHexString(),access:access},'secret123').toString();
+
+    if(user.tokens.length){
+
+        user.tokens.concat([{
+            access,
+            token
+        }]);
+
+    }else{
+
+        user.tokens = [{
+            access,
+            token
+        }];
+    }
+    
+
+    return user.save().then(()=>{
+       
+        return token;
+    });
+
+};
+
+UserSchema.methods.toJSON = function(){
+
+    var user = this;
+    var userObject = user.toObject();
+
+    return _.pick(userObject, ['_id','mobileNumber','firstName','middleName','lastName']);
+};
+
+var User = mongoose.model('Users',UserSchema);
 
 module.exports = {
 
