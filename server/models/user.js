@@ -72,6 +72,10 @@ UserSchema.methods.generateAuthToken = function(){
 
     var token = jwt.sign({_id:user._id.toHexString(),access:access},'secret123').toString();
 
+    console.log("1... "+token);
+    console.log("user._id..."+user._id);
+    
+
     if(user.tokens.length){
 
         user.tokens.concat([{
@@ -120,7 +124,9 @@ UserSchema.statics.findByToken = function(token){
 UserSchema.statics.findByCredentials = function(mobileNumber,password){
 
     var User = this;
-
+    console.log("mobileNumber "+mobileNumber);
+    console.log("password");
+    
     return User.findOne({mobileNumber}).then((user)=>{
 
         if(!user){
