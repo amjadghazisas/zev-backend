@@ -12,7 +12,7 @@ const login = (req,res) =>{
       console.log("user.mobileNumber...@@@ "+user.mobileNumber);
 
       return user.generateAuthToken().then((token)=>{
-        res.header('x-auth',user.tokens[0].token).send(user);
+        res.header('x-auth',token).send(user);
       });
 
     }).catch((e)=>{

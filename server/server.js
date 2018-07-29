@@ -10,6 +10,7 @@ const {removeAll, removeById, removeOne, update} = require('./db/queries/mongoos
 const {addUser} = require('./services/addUser');
 const {getMe} = require('./services/getMe');
 const {login} = require('./services/login');
+const {logout} = require('./services/logout');
 
 const {authenticate} = require("./middleware/authenticate");
 
@@ -46,6 +47,13 @@ app.post('/users/login', (req,res) => {
 
     login(req,res);
 });
+
+app.delete('/users/me/token', authenticate, (req,res) => {
+
+    logout(req,res);
+});
+
+//===================
 
 app.get('/users/:userId',(req,res) => {
 

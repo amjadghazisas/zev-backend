@@ -72,13 +72,13 @@ UserSchema.methods.generateAuthToken = function(){
 
     var token = jwt.sign({_id:user._id.toHexString(),access:access},'secret123').toString();
 
-    console.log("1... "+token);
+    console.log("token... "+token);
     console.log("user._id..."+user._id);
     
 
     if(user.tokens.length){
 
-        user.tokens.concat([{
+        user.tokens.push([{
             access,
             token
         }]);
@@ -96,6 +96,24 @@ UserSchema.methods.generateAuthToken = function(){
        
         return token;
     });
+
+};
+
+UserSchema.methods.removeToken = function(token){
+
+    var user = this;
+
+    return user.update({
+
+        $pull:{
+
+            tokens:{
+
+                token:token
+            }
+        }
+
+    });   
 
 };
 
