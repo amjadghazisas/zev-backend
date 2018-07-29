@@ -9,6 +9,7 @@ const {findByIdQuery} = require('./db/queries/mongoose-queries');
 const {removeAll, removeById, removeOne, update} = require('./db/queries/mongoose-queries');
 const {addUser} = require('./services/addUser');
 const {getMe} = require('./services/getMe');
+const {login} = require('./services/login');
 
 const {authenticate} = require("./middleware/authenticate");
 
@@ -39,6 +40,11 @@ app.get('/users',(req,res) => {
 app.get('/users/me',authenticate, (req,res) => {
 
     getMe(req,res);
+});
+
+app.post('/users/login', (req,res) => {
+
+    login(req,res);
 });
 
 app.get('/users/:userId',(req,res) => {
