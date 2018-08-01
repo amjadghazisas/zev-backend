@@ -72,11 +72,14 @@ UserSchema.methods.generateAuthToken = function(){
 
     var token = jwt.sign({_id:user._id.toHexString(),access:access},'secret123').toString();
 
-    console.log("token... "+token);
-    console.log("user._id..."+user._id);
+    user.tokens = user.tokens.concat([{
+        access,
+        token
+    }]);
+
     
 
-    if(user.tokens.length){
+    /*if(user.tokens.length){
 
         user.tokens.push([{
             access,
@@ -89,7 +92,7 @@ UserSchema.methods.generateAuthToken = function(){
             access,
             token
         }];
-    }
+    }*/
     
 
     return user.save().then(()=>{
@@ -142,14 +145,15 @@ UserSchema.statics.findByToken = function(token){
 UserSchema.statics.findByCredentials = function(mobileNumber,password){
 
     var User = this;
-    console.log("mobileNumber "+mobileNumber);
-    console.log("password");
+    
     
     return User.findOne({mobileNumber}).then((user)=>{
 
+        
         if(!user){
 
             return Promise.reject();
+            
         }
 
         return new Promise((resolve,reject)=>{
@@ -157,6 +161,7 @@ UserSchema.statics.findByCredentials = function(mobileNumber,password){
             bcrypt.compare(password,user.password,(err,res)=>{
 
                 if(res){
+                    console.log("Lalalalala...");
                     resolve(user);
                 }else{
                     reject();
